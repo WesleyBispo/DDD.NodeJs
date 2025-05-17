@@ -1,8 +1,16 @@
 export class Slug {
   public value: string
 
-  constructor(value: string) {
+  private constructor(value: string) {
     this.value = value
+  }
+
+  static create(value: string) {
+    if (!value) {
+      throw new Error('Slug cannot be empty')
+    }
+
+    return new Slug(value)
   }
 
   /**
