@@ -23,12 +23,40 @@ describe('Delete Question - Use Case', () => {
 
     expect(questionBeforeDelete).toBeTruthy()
 
-    await sut.execute({ questionId: id.toString() })
+    await sut.execute({
+      authorId: newQuestion.authorId.toString(),
+      questionId: id.toString(),
+    })
 
     const questionAfterDelete = await questionsRepository.findById(
       id.toString(),
     )
 
     expect(questionAfterDelete).toBeFalsy()
+  })
+
+  it('should not be able to delete a question from another creator', async () => {
+    const newQuestion = makeQuestion()
+
+    await questionsRepository.create(newQuestion)
+
+    const { id } = newQuestion
+
+    const questionBeforeDelete = questionsRepository.findById(id.toString())
+
+    expect(questionBeforeDelete).toBeTruthy()
+
+    expect(async () => {
+      await sut.execute({
+        authorId: 'another-author-id',
+        questionId: id.toString(),
+      })
+    }).rejects.toBeInstanceOf(Error)
+
+    const questionAfterDelete = await questionsRepository.findById(
+      id.toString(),
+    )
+
+    expect(questionAfterDelete).toBeTruthy()
   })
 })
