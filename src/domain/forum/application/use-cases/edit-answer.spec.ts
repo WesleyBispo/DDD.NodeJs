@@ -47,7 +47,7 @@ describe('Edit Answer - Use Case', () => {
 
     expect(answerBeforeEdit).toBeTruthy()
 
-    expect(async () => {
+    await expect(async () => {
       await sut.execute({
         authorId: 'another-author-id',
         answerId: id.toString(),

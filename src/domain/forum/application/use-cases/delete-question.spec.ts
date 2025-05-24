@@ -46,7 +46,7 @@ describe('Delete Question - Use Case', () => {
 
     expect(questionBeforeDelete).toBeTruthy()
 
-    expect(async () => {
+    await expect(async () => {
       await sut.execute({
         authorId: 'another-author-id',
         questionId: id.toString(),
